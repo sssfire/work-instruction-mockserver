@@ -2,14 +2,14 @@ package com.workinstruction.mockserver;
 
 import org.springframework.http.HttpStatus;
 
-public class ResponseUser {
+public class User {
     
-    public ResponseUser(String username, String password) {
+    public User(String username, String password) {
         this.username = username;
         this.password = password;
     }
     
-    public ResponseUser() {
+    public User() {
     }
     
     /**

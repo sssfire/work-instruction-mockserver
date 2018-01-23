@@ -13,72 +13,85 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class UserAuthentication {
+public class DataService {
     
-    private HashMap<String, ResponseUser> users = new HashMap<String, ResponseUser>();
+    private HashMap<String, User> users = new HashMap<String, User>();
     private Work work = new Work();
     
-    public UserAuthentication() {
+    public DataService() {
         dataStore4User();
         dataStore4Workinstructions();
     }
     
-    @RequestMapping(value="/user", method = RequestMethod.POST)
+    @RequestMapping(value="/validateuser", method = RequestMethod.POST)
     @CrossOrigin(origins = "*")
-    public ResponseEntity<ResponseUser> home(@RequestBody ResponseUser responseUser) {
+    public ResponseEntity<ResponseMessage> validateUser(@RequestBody User responseUser) {
         
-        ResponseUser user=getResponseUser(responseUser.username,responseUser.password);
-        return new ResponseEntity<ResponseUser>(user, user.getStatus());
+        ResponseMessage message=getResponseUser(responseUser.username,responseUser.password);
+        return new ResponseEntity<ResponseMessage>(message, message.getStatus());
         
     }
     
-    public ResponseUser getResponseUser(String username, String password){
-        ResponseUser user = users.get(username);
+    public ResponseMessage getResponseUser(String username, String password){
+        User user = users.get(username);
         if(user!=null){
             if(encodePassword(user.getUsername(), user.getPassword()).equals(password)){
-            	user = new ResponseUser();
-                user.setMessage("授权成功");
-                user.setStatus(HttpStatus.OK);
-                user.setUsername(username);
-                user.setPassword("******");
-                return user;
+                ResponseMessage message = new ResponseMessage();
+                message.setMessage("授权成功");
+                message.setStatus(HttpStatus.OK);
+                return message;
             }else{
-                user = new ResponseUser();
-                user.setMessage("用户密码错误");
-                user.setStatus(HttpStatus.FORBIDDEN);
-                user.setUsername(username);
-                user.setPassword("******");
-                return user;
+                ResponseMessage message = new ResponseMessage();
+                message.setMessage("用户密码错误");
+                message.setStatus(HttpStatus.FORBIDDEN);
+                return message;
             }
         }else{
-            user = new ResponseUser();
-            user.setUsername(username);
-            user.setPassword("******");
-            user.setMessage("用户不存在");
-            user.setStatus(HttpStatus.NOT_FOUND);
-            return user;
+            ResponseMessage message = new ResponseMessage();
+            message.setMessage("用户不存在");
+            message.setStatus(HttpStatus.NOT_FOUND);
+            return message;
         }
     }
     
     @RequestMapping(value="/workinstructions", method = RequestMethod.GET)
-    public ResponseEntity<Work> getWorkinstructions(@RequestParam String username){
+    public ResponseEntity<Work> getWorkinstructions(){
     	return new ResponseEntity<Work>(work, HttpStatus.OK);
+    }
+    
+    @RequestMapping(value="/workinstructions", method = RequestMethod.POST)
+    public ResponseEntity<ResponseMessage> dealWorkInstructionResult(@RequestBody WorkInstructionResult[] workInstructionResult){
+    	for(int i=0;i<workInstructionResult.length;i++){
+    		System.out.println("num:"+i);
+    		System.out.println(workInstructionResult[i]);
+    	}
+    	
+        ResponseMessage message = new ResponseMessage();
+    	if(workInstructionResult.length > 0){
+    		message.setMessage("工单结果提交成功");
+    		message.setStatus(HttpStatus.OK);
+        	return new ResponseEntity<ResponseMessage>(message, HttpStatus.OK);
+    	}else{
+    		message.setMessage("工单结果提交失败");
+    		message.setStatus(HttpStatus.NOT_ACCEPTABLE);
+        	return new ResponseEntity<ResponseMessage>(message, HttpStatus.NOT_ACCEPTABLE);
+    	}
     }
     
     public void dataStore4User(){
         
-        ResponseUser user;
+        User user;
         
-        user = new ResponseUser("admin", "88888888");
+        user = new User("admin", "88888888");
         users.put(user.getUsername(), user);
         
-        user = new ResponseUser("worker", "66666666");
+        user = new User("worker", "66666666");
         users.put(user.getUsername(), user);
         
-        user = new ResponseUser("worker1", "11111111");
+        user = new User("worker1", "11111111");
         users.put(user.getUsername(), user);
         
-        user = new ResponseUser("worker2", "22222222");
+        user = new User("worker2", "22222222");
         users.put(user.getUsername(), user);
         
     }
