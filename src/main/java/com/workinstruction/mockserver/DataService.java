@@ -108,9 +108,13 @@ public class DataService {
     	workInstruction.setUid("P01-0001");
     	workInstruction.setType("process");
     	workInstruction.setLastmoddate("20180120");
-    	workInstruction.setWorkdesc("安装左侧翼测试设备");
-    	workInstruction.addWorkAttribute("attribute1", "value1");
-    	workInstruction.addWorkAttribute("attribute2", "value2");
+    	workInstruction.setWorkdesc("安装左侧翼测试设备222");
+    	workInstruction.addWorkAttribute("高度", "10m");
+    	workInstruction.addWorkAttribute("宽度", "100m");
+    	workInstruction.addWorkAttribute("设备", "起重机");
+    	workInstruction.addWorkAttribute("负责人", "看着办");
+    	workInstruction.addWorkAttribute("开工时间", "2018年1月1日");
+    	workInstruction.addWorkAttribute("完工时间", "2018年12月31日");
     	//attachment
     	Attachment attachment = new Attachment();
     	attachment.setUid("A-01");
@@ -127,6 +131,8 @@ public class DataService {
     	//executor
     	workInstruction.addExecutor("张三");
     	workInstruction.addExecutor("李四");
+    	workInstruction.addExecutor("王五");
+    	workInstruction.addExecutor("麻六");
     	work.addWorkInstruction(workInstruction);
     	
     	//workinstruction：安装左侧翼测试设备=》器材准备
